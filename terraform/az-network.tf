@@ -24,7 +24,7 @@ resource "azurerm_subnet" "solace_subnet" {
 
   name                 = "${var.tag_name_prefix}-subnet"
   virtual_network_name = azurerm_virtual_network.solace_network[0].name
-  address_prefix       = "10.0.1.0/24"
+  address_prefixes       = ["10.0.1.0/24"]
   resource_group_name  = var.az_resgrp_name == "" ? azurerm_resource_group.solace_az_resgrp[0].name : var.az_resgrp_name
 
 }

@@ -6,9 +6,16 @@ semp_admin_user: admin
 semp_admin_password: admin
 vpn:
   vpn_name: "default2"
-  maxMsgSpoolUsage: 10000
+  maxMsgSpoolUsage: 0
   authenticationBasicType: "internal"
-  serviceMqttMaxConnectionCount: 1000
-  serviceMqttPlainTextEnabled: "false"
-  serviceMqttPlainTextListenPort:  1884
+  serviceMqttMaxConnectionCount: 0
+  serviceMqttPlainTextEnabled: false
+  serviceMqttPlainTextListenPort:  0
+  serviceMqttWebSocketEnabled: false
+  serviceMqttWebSocketListenPort: 0
+  serviceMqttTlsEnabled: false
+  serviceMqttTlsListenPort: 0
+  serviceMqttTlsWebSocketEnabled: false
+  serviceMqttTlsWebSocketListenPort: 0
   dmrEnabled: false
+  enabled: false

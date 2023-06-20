@@ -62,10 +62,24 @@ resource "azurerm_network_security_rule" "solbroker-webportal-pt" {
   resource_group_name = var.az_resgrp_name == "" ? azurerm_resource_group.solace_az_resgrp[0].name : var.az_resgrp_name
   network_security_group_name = azurerm_network_security_group.solbroker_secgrp.name
 }
+resource "azurerm_network_security_rule" "solbroker-webportal-tls" {
+  name                        = "WebPortal-TLS"
+  priority                    = 103
+  direction                  = "Inbound"
+  access                     = "Allow"
+  protocol                   = "Tcp"
+  source_port_range          = "*"
+  destination_port_range     = "1943"
+  source_address_prefix      = "*"
+  destination_address_prefix = "*"
+
+  resource_group_name = var.az_resgrp_name == "" ? azurerm_resource_group.solace_az_resgrp[0].name : var.az_resgrp_name
+  network_security_group_name = azurerm_network_security_group.solbroker_secgrp.name
+}
 
 resource "azurerm_network_security_rule" "solbroker-msging-pt" {
   name                        = "SolMessaging-PT"
-  priority                    = 103
+  priority                    = 104
   direction                  = "Inbound"
   access                     = "Allow"
   protocol                   = "Tcp"
@@ -77,10 +91,24 @@ resource "azurerm_network_security_rule" "solbroker-msging-pt" {
   resource_group_name = var.az_resgrp_name == "" ? azurerm_resource_group.solace_az_resgrp[0].name : var.az_resgrp_name
   network_security_group_name = azurerm_network_security_group.solbroker_secgrp.name
 }
+resource "azurerm_network_security_rule" "solbroker-msging-tls" {
+  name                        = "SolMessaging-TLS"
+  priority                    = 105
+  direction                  = "Inbound"
+  access                     = "Allow"
+  protocol                   = "Tcp"
+  source_port_range          = "*"
+  destination_port_range     = "55443"
+  source_address_prefix      = "*"
+  destination_address_prefix = "*"
 
-resource "azurerm_network_security_rule" "solbroker-mqtt-pt" {
-  name                        = "SolMQTT_PT"
-  priority                    = 104
+  resource_group_name = var.az_resgrp_name == "" ? azurerm_resource_group.solace_az_resgrp[0].name : var.az_resgrp_name
+  network_security_group_name = azurerm_network_security_group.solbroker_secgrp.name
+}
+
+resource "azurerm_network_security_rule" "solbroker-mqtt-default-pt" {
+  name                        = "MQTT_default_PT"
+  priority                    = 106
   direction                  = "Inbound"
   access                     = "Allow"
   protocol                   = "Tcp"
@@ -92,3 +120,18 @@ resource "azurerm_network_security_rule" "solbroker-mqtt-pt" {
   resource_group_name = var.az_resgrp_name == "" ? azurerm_resource_group.solace_az_resgrp[0].name : var.az_resgrp_name
   network_security_group_name = azurerm_network_security_group.solbroker_secgrp.name
 }
+resource "azurerm_network_security_rule" "solbroker-mqtt-default-tls" {
+  name                        = "MQTT_default_TLS"
+  priority                    = 107
+  direction                  = "Inbound"
+  access                     = "Allow"
+  protocol                   = "Tcp"
+  source_port_range          = "*"
+  destination_port_range     = "8883"
+  source_address_prefix      = "*"
+  destination_address_prefix = "*"
+
+  resource_group_name = var.az_resgrp_name == "" ? azurerm_resource_group.solace_az_resgrp[0].name : var.az_resgrp_name
+  network_security_group_name = azurerm_network_security_group.solbroker_secgrp.name
+}
+

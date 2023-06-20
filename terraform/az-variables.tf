@@ -6,10 +6,10 @@
 
 # Azure config
 variable "az_region" {
-#  default = "West US" # No AZ Supports, Supports UltraD not in AZ - Total Regional vCPUs 100
-
-  default = "West US 2" # Supports AZ, Supports UltraD in 3 AZ    - Total Regional vCPUs 10 
-#  default = "Japan East" # Supports AZ, Supports UltraD in 2 AZ   - Total Regional vCPUs 160
+  default = "East US"   # DSv2 10, DSv3 51  Supports AZ
+#  default = "West US"  # DSv2 100, DSv3 10  No AZ Supports, Supports UltraD not in AZ - Total Regional vCPUs 130
+#  default = "West US 2" # DSv2 10, DSv3 10  Supports AZ, Supports UltraD in 3 AZ    - Total Regional vCPUs 10 
+#  default = "Japan East" # DSv2 100, DSv3 10 Supports AZ, Supports UltraD in 2 AZ   - Total Regional vCPUs 160
 }
 
 # ssh config

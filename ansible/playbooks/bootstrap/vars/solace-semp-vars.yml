@@ -36,9 +36,16 @@ vpn:
   maxMsgSpoolUsage: 100000
   authenticationBasicType: "none"
   serviceMqttMaxConnectionCount: 200000
-  serviceMqttPlainTextEnabled: "true"
-  serviceMqttPlainTextListenPort:  1884 
+  serviceMqttPlainTextEnabled: true
+  serviceMqttPlainTextListenPort:  1884
+  serviceMqttWebSocketEnabled: true
+  serviceMqttWebSocketListenPort: 8001
+  serviceMqttTlsEnabled: true
+  serviceMqttTlsListenPort: 8884
+  serviceMqttTlsWebSocketEnabled: true
+  serviceMqttTlsWebSocketListenPort: 8444
   dmrEnabled: true
+  enabled: true
 
 #####################################################
 # config variables for creating the ClientProfile
