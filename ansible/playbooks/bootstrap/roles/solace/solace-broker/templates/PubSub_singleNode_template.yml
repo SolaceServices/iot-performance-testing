@@ -1,0 +1,35 @@
+# docker-compose -f PubSubStandard_singleNode.yml up -d
+version: "3.3"
+
+services:
+  primary:
+    container_name: {{ container_name }}
+    hostname: {{ solhost_name }}
+    image: {{ solace_image_name }}:{{ solace_image_version }}
+    shm_size: {{ shm_size }}
+    network_mode: host
+    user: "{{ user }}"
+    cap_drop:
+    - ALL
+    cap_add:
+    - NET_RAW
+    ulimits:
+      core: {{ ulimit_core }}
+      memlock: {{ ulimit_memlock }}
+      nofile:
+        soft: {{ ulimit_nofile_soft }}
+        hard: {{ ulimit_nofile_hard }}
+    restart: on-failure:5
+    volumes:
+      - {{ solace_storage_rootpath }}/jail:/var/lib/solace/jail:Z
+      - {{ solace_storage_rootpath }}/var:/var/lib/solace/var:Z
+      - {{ solace_storage_rootpath }}/diagnostics:/var/lib/solace/diagnostics:Z
+      - {{ solace_storage_rootpath }}/spool:/var/lib/solace/spool:Z
+      - {{ solace_storage_rootpath }}/spool-cache:/var/lib/solace/spool-cache:Z
+      - {{ solace_storage_rootpath }}/spool-cache-backup:/var/lib/solace/spool-cache-backup:Z
+    environment:
+      - username_{{ username_admin }}_globalaccesslevel=admin
+      - username_{{ username_admin }}_password={{ username_admin_password }}
+      - system_scaling_maxconnectioncount={{ system_scaling_maxconnectioncount }}
+      - TZ={{ time_zone }}
+{{ solace_eval_key }}

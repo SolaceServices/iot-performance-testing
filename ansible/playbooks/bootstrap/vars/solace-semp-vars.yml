@@ -1,0 +1,141 @@
+#####################################################
+# Config variables SEMP calls
+#####################################################
+semp_admin_user: admin
+semp_admin_password: admin
+solhost_name_prefix: PubSubSolace
+
+#####################################################
+# Broker Max Spool
+#####################################################
+max_spool_usage: 100000
+
+#####################################################
+# config variables for creating the DMR Cluster
+#####################################################
+dmr:
+  clusterName: "DMRSolCluster"
+  authenticationBasicEnabled: true
+  authenticationBasicPassword: "DMRClusterPWD123"
+  authenticationBasicType: "internal"
+
+#####################################################
+# config variables for creating the DMR Cluster
+#####################################################
+dmrlink:
+  queueMaxMsgSpoolUsage: 50000
+  linkSpan: "internal"
+  enabled: false #Disabled on creation so that addresses can be configured
+
+#####################################################
+# config variables for creating the VPN
+#####################################################
+#Message VPN params
+vpn:
+  vpn_name: "EventMesh_VPN"
+  maxMsgSpoolUsage: 100000
+  authenticationBasicType: "none"
+  serviceMqttMaxConnectionCount: 200000
+  serviceMqttPlainTextEnabled: "true"
+  serviceMqttPlainTextListenPort:  1884 
+  dmrEnabled: true
+
+#####################################################
+# config variables for creating the ClientProfile
+#####################################################
+client_profiles:
+- clientProfileName: "SOTI_CP"
+  allowGuaranteedMsgSendEnabled: "false"
+  allowGuaranteedMsgReceiveEnabled: "false"
+  allowTransactedSessionsEnabled: "false"
+  allowSharedSubscriptionsEnabled: "true"
+  maxConnectionCountPerClientUsername: 50
+  serviceSmfMaxConnectionCountPerClientUsername: 50
+  serviceWebMaxConnectionCountPerClientUsername: 0
+  allowBridgeConnectionsEnabled: "false"
+  allowGuaranteedEndpointCreateEnabled: "false"
+  maxEndpointCountPerClientUsername: 10000
+  maxEgressFlowCount: 10000
+  maxIngressFlowCount: 10000
+  apiQueueManagementCopyFromOnCreateName: ""
+  apiTopicEndpointManagementCopyFromOnCreateName: ""
+  maxSubscriptionCount: 10000
+  maxTransactedSessionCount: 10
+  maxTransactionCount: 10
+- clientProfileName: "webCP"
+  allowGuaranteedMsgSendEnabled: "true"
+  allowGuaranteedMsgReceiveEnabled: "true"
+  allowTransactedSessionsEnabled: "false"
+  allowSharedSubscriptionsEnabled: "true"
+  maxConnectionCountPerClientUsername: 200000
+  serviceSmfMaxConnectionCountPerClientUsername: 10000
+  serviceWebMaxConnectionCountPerClientUsername: 200000
+  allowBridgeConnectionsEnabled: "false"
+  allowGuaranteedEndpointCreateEnabled: "false"
+  maxEndpointCountPerClientUsername: 10000
+  maxEgressFlowCount: 10000
+  maxIngressFlowCount: 10000
+  apiQueueManagementCopyFromOnCreateName: ""
+  apiTopicEndpointManagementCopyFromOnCreateName: ""
+  maxSubscriptionCount: 10000
+  maxTransactedSessionCount: 10
+  maxTransactionCount: 10
+- clientProfileName: "testCP"
+  allowGuaranteedMsgSendEnabled: "true"
+  allowGuaranteedMsgReceiveEnabled: "true"
+  allowTransactedSessionsEnabled: "false"
+  allowSharedSubscriptionsEnabled: "true"
+  maxConnectionCountPerClientUsername: 200000
+  serviceSmfMaxConnectionCountPerClientUsername: 10000
+  serviceWebMaxConnectionCountPerClientUsername: 200000
+  allowBridgeConnectionsEnabled: "false"
+  allowGuaranteedEndpointCreateEnabled: "false"
+  maxEndpointCountPerClientUsername: 10000
+  maxEgressFlowCount: 10000
+  maxIngressFlowCount: 10000
+  apiQueueManagementCopyFromOnCreateName: ""
+  apiTopicEndpointManagementCopyFromOnCreateName: ""
+  maxSubscriptionCount: 10000
+  maxTransactedSessionCount: 10
+  maxTransactionCount: 10
+
+#####################################################
+# config variables for creating the Client-Usernames
+#####################################################
+
+client_usernames:
+- username: "SOTIUsr"
+  aclProfileName: "default"
+  clientProfileName: "SOTI_CP"
+  enabled: true
+  password: solace123
+- username: "webUsr"
+  aclProfileName: "default"
+  clientProfileName: "webCP"
+  enabled: true
+  password: solace123
+- username: "testUsr"
+  aclProfileName: "default"
+  clientProfileName: "testCP"
+  enabled: true
+  password: solace123
+
+#####################################################
+# config variables for creating queues
+#####################################################
+# List of Queues generated from Terraform based on the number of SDKPerf Nodes 
+
+queues:
+- queueName: "default"
+  accessType: "non-exclusive"
+  consumerAckPropagationEnabled: "true" 
+  egressEnabled: false
+  ingressEnabled: false
+  maxBindCount: 1000
+  maxMsgSize: 10000000
+  maxMsgSpoolUsage: 50000
+  permission: "delete"
+  rejectMsgToSenderOnDiscardBehavior: "never"  
+  subscription_topics:
+  - "TestTopic1"
+  - "TestTopic2"

@@ -1,0 +1,16 @@
+{
+  "dmrClusterName": "{{ dmr.clusterName }}",
+  "remoteNodeName": "{{ dmrRemoteNode }}",
+  "span": "{{ dmrlink.linkSpan }}",
+  "queueMaxMsgSpoolUsage": {{ dmrlink.queueMaxMsgSpoolUsage }},
+  "enabled": {{ dmrlink.enabled }},
+  "initiator": "lexical",
+  "authenticationScheme": "basic",
+  "egressFlowWindowSize": 0,
+  "queueMaxRedeliveryCount": 0,
+  "queueMaxTtl": 0,
+  "queueRejectMsgToSenderOnDiscardBehavior": "always",
+  "queueRespectTtlEnabled": true,
+  "transportCompressedEnabled": true,
+  "transportTlsEnabled": false
+}

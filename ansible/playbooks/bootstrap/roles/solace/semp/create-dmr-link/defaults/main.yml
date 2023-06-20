@@ -1,0 +1,14 @@
+---
+# defaults file for create-msg-vpn
+cloud_provider: default
+semp_mngmt_host: "{{ inventory_hostname }}"
+semp_admin_user: admin
+semp_admin_password: admin
+dmrRemoteNode: SolNode
+dmr:
+  clusterName: "SolCluster"
+dmrlink:
+  queueMaxMsgSpoolUsage: 20000
+  linkSpan: "internal"
+  enabled: false #Disabled on creation so that addresses can be configured
+

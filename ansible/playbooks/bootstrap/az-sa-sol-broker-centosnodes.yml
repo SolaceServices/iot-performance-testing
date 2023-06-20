@@ -1,0 +1,193 @@
+---
+#------------------------------------------------------------------------------------#
+- hosts: sol_brokers
+  remote_user: centos # login as user centos
+  become: true # Run as Root
+  pre_tasks:
+  - include_vars: vars/common-sol-brokers-vars.yml     # Load common variables for the Ansible Tasks and Roles from this file  
+  - include_vars: vars/az-sa-sol-brokers-vars.yml     # Load AWS variables for HA Solace Brokers from this file
+  tasks:
+#####################################################
+# Enable SWAP on the broker
+#####################################################
+    - include_role: 
+        name: centos/az-swap-bootstrap
+#####################################################
+# Install Docker CE
+#####################################################
+    - include_role: 
+        name: centos/docker_ce
+
+#------------------------------------------------------------------------------------#
+- hosts: sol_brokers
+  remote_user: centos # login as user centos
+  become: true # Run as Root
+  tasks:
+#####################################################
+# Format, Partition External Disk, and prepare for Broker Usage
+#####################################################
+    - include_role: 
+        name: solace/solace-exstorage-bootstrap
+      vars:
+        # AZURE Instances
+        solace_mount_dev: /dev/sdc
+        solace_storage_part: /dev/sdc1
+
+#------------------------------------------------------------------------------------#
+- hosts: sol_brokers
+  remote_user: centos # login as user centos
+  become: true # Run as Root
+  pre_tasks:
+  - include_vars: vars/common-sol-brokers-vars.yml  # Load common variables for the Ansible Tasks and Roles from this file  
+  tasks:
+#####################################################
+# Create the Solace PubSub Docker compose file, Copy the Solace Image (if needed), Load and Run it
+#####################################################
+    - include_role: 
+        name: solace/solace-broker
+      vars:
+      #Determine the current Index on the Ansible Inventory based on the broker public IP via "groups['ha_sol_primary_nodes'].index(inventory_hostname)"
+      #And use that index to retreive corresponding private IPs for the HA_cluster
+        container_name: PubSubSingleNode{{ groups['sol_brokers'].index(inventory_hostname) }}
+        solhost_name: "{{ solhost_name_prefix ~ groups['sol_brokers'].index(inventory_hostname) }}"
+        node_role: single
+        solace_edition: entEVAL
+        time_zone: US/Eastern
+        system_scaling_maxconnectioncount: 1000
+        #ulimit_nofile_hard: 42192
+
+#------------------------------------------------------------------------------------#
+#- hosts: sol_brokers
+#  remote_user: centos # login as user centos
+#  become: true # Run as Root
+#  tasks:
+#####################################################
+# Install performance monitoring tools HTOP, sysstat (iostat)
+#####################################################
+#    - include_role: 
+#        name: centos/os-bootstrap
+
+#------------------------------------------------------------------------------------#
+- hosts: sol_brokers
+  remote_user: centos # login as user centos
+  become: false # Run as Root
+  pre_tasks:
+  - include_vars: vars/solace-semp-vars.yml
+  - include_vars: vars/az-sa-sol-brokers-vars.yml          # Load AWS variables for HA Solace Brokers from this file
+  tasks:
+#####################################################
+# Ensure that SEMP is ready before sending any SEMP request to the broker
+#####################################################
+    - name: Wait for SEMP to be ready
+      wait_for:
+        port: 8080 # default SEMP port
+        host: "{{ inventory_hostname }}" # Current host on the Ansible inventory
+        connect_timeout: 5
+        delay: 10
+        timeout: 300
+      delegate_to: localhost
+#####################################################
+# Increase  the Broker Max-Spool Usage
+#####################################################
+    - include_role:
+        name: solace/semp/update-broker-spoolsize
+#####################################################
+# Create DMR Cluster
+#####################################################
+    - include_role:
+        name: solace/semp/create-dmr-cluster
+#####################################################
+# Create DMR Links - Disabled so that Addresses can be configured
+#####################################################
+    - name: Create DMR Links
+      include_role:
+        name: solace/semp/create-dmr-link
+      vars:
+        dmrRemoteNode: "{{ solhost_name_prefix ~ hostIndex }}"
+      loop: "{{ groups['sol_brokers'] }}"
+      loop_control:
+        index_var: hostIndex
+      when: hostIndex != groups['sol_brokers'].index(inventory_hostname)  #Create links only to hosts different than SELF
+#####################################################
+# Create DMR Link Remote Addresses
+#####################################################
+    - name: Create DMR Link Remote Addresses
+      include_role:
+        name: solace/semp/create-dmr-link-remoteAddress
+      vars:
+        hostIP: "{{ item }}"
+        dmrRemoteNode: "{{ solhost_name_prefix ~ hostIndex }}"
+      loop: "{{ groups['sol_brokers_privateip'] }}" # Use Internal IPs to connect DMR
+      loop_control:
+        index_var: hostIndex
+      when: hostIndex != groups['sol_brokers'].index(inventory_hostname)  #Create links only to hosts different than SELF
+#####################################################
+# Enable DMR Links 
+#####################################################
+    - name: Enable DMR Links
+      include_role:
+        name: solace/semp/update-dmr-link
+      vars:
+        dmrRemoteNode: "{{ solhost_name_prefix ~ hostIndex }}"
+        dmrlink:
+          enabled: true
+          queueMaxMsgSpoolUsage: 20000
+          linkSpan: "internal"
+      loop: "{{ groups['sol_brokers'] }}"
+      loop_control:
+        index_var: hostIndex
+      when: hostIndex != groups['sol_brokers'].index(inventory_hostname)  #Enable links only to hosts different than SELF
+#####################################################
+# Create a VPN for Testing
+#####################################################
+    - include_role:
+        name: solace/semp/create-msg-vpn
+#####################################################
+# Create a Loop that creates all client Profiles defined on the Variables File
+#####################################################
+    - name: Create Client Profiles
+      block:
+      - name: Create all defined profiles on Variables File
+        include_role:
+          name: solace/semp/create-client-profile
+        vars:
+          cp: "{{ item }}"
+        with_items: "{{ client_profiles }}"
+#####################################################
+# Create a Loop that creates all the Client Usernames defined on the Variables File
+#####################################################
+    - name: Create Client Usernames
+      block:
+      - name: Create Client Usernames
+        include_role:
+          name: solace/semp/create-client-username
+        vars:
+          cu: "{{ item }}"
+        with_items: "{{ client_usernames }}"
+#####################################################
+# Create a Loop that creates all the queues defined on the Variables File
+#####################################################
+    - name: Create Queues
+      block:
+      - name: Create all defined queues on Variables File
+        include_role:
+          name: solace/semp/create-queue
+        vars:
+          q: "{{ queue }}"
+        loop_control:
+          loop_var: queue
+        with_items: "{{ queues }}"
+#####################################################
+# Create a Loop that creates queue subscription to the topic for each one of the queues defined on the Variables File
+#####################################################
+    - name: Update Queues
+      block:
+      - name: Create all defined queues on Variables File
+        include_role:
+          name: solace/semp/create-queue-subscription
+        vars:
+          q: "{{ item.0.queueName }}"
+          subscriptionTopic: "{{ item.1 }}"
+        with_subelements:
+        - "{{ queues | selectattr('subscription_topics', 'defined') | list }}" 
+        - "subscription_topics"

@@ -1,0 +1,64 @@
+---
+# tasks file for solace-broker
+- debug: msg="solace_edition = {{ solace_edition }}"
+
+- name: Define Key for Solace Enterprise EVAL version 
+  set_fact:
+    solace_eval_key: "      - productkey=quscWoxxdp4-Gg88sDQ9dcA-k8vnR1QrpBr-EVAL-G-GA_1"
+  when: solace_edition == "entEVAL"
+
+- name: Copy Solace Enterprise Edition {{ solace_image_name }}-{{ solace_image_version }}-docker.tar.gz to broker nodes
+  copy:
+    src: "{{ solace_image_name }}-{{ solace_image_version }}-docker.tar.gz"
+    dest: ./
+    owner: "{{ file_owner }}"
+    mode: "{{ file_mode }}"
+  when: solace_edition == "enterprise"
+
+
+- name: Load Solace Enterprise Edition Docker Image
+  command: docker load -i ./{{ solace_image_name }}-{{ solace_image_version }}-docker.tar.gz
+  when: solace_edition == "enterprise"
+
+- name: Parse & copy docker-compose template to Standalone broker node
+  template:
+    src: PubSub_{{ node_role }}Node_template.yml
+    dest: ./PubSub_{{ node_role }}Node.yml
+    owner: "{{ file_owner }}"
+    mode: "{{ file_mode }}"
+#  vars:
+#    solace_image_name : "{{ solaceImage }}"
+  when: node_role == "single"
+
+- name: Parse & copy docker-compose template to Primary broker node
+  template:
+    src: PubSub_messagingNode_template.yml
+    dest: ./PubSub_{{ node_role }}Node.yml
+    owner: "{{ file_owner }}"
+    mode: "{{ file_mode }}"
+#  vars:
+#    solace_image_name : "{{ solaceImage }}"
+  when: node_role == "primary"
+
+- name: Parse & copy docker-compose template to Backup broker node
+  template:
+    src: PubSub_messagingNode_template.yml
+    dest: ./PubSub_{{ node_role }}Node.yml
+    owner: "{{ file_owner }}"
+    mode: "{{ file_mode }}"
+#  vars:
+#    solace_image_name : "{{ solaceImage }}"    
+  when: node_role == "backup"
+
+- name: Parse & copy docker-compose template to Monitor broker node
+  template:
+    src: PubSub_{{ node_role }}Node_template.yml
+    dest: ./PubSub_{{ node_role }}Node.yml
+    owner: "{{ file_owner }}"
+    mode: "{{ file_mode }}"
+#  vars:
+#    solace_image_name : "{{ solaceImage }}"    
+  when: node_role == "monitor"
+
+- name: Start 'er up
+  command: /usr/local/bin/docker-compose -f ./PubSub_{{ node_role }}Node.yml up -d
