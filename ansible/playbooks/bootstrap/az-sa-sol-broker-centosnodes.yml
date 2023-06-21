@@ -129,10 +129,7 @@
         name: solace/semp/update-dmr-link
       vars:
         dmrRemoteNode: "{{ solhost_name_prefix ~ hostIndex }}"
-        dmrlink:
-          enabled: true
-          queueMaxMsgSpoolUsage: 20000
-          linkSpan: "internal"
+        dmrlink_enabled: true
       loop: "{{ groups['sol_brokers'] }}"
       loop_control:
         index_var: hostIndex
