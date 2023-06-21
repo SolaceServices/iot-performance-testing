@@ -106,28 +106,86 @@ resource "azurerm_network_security_rule" "solbroker-msging-tls" {
   network_security_group_name = azurerm_network_security_group.solbroker_secgrp.name
 }
 
-resource "azurerm_network_security_rule" "solbroker-mqtt-default-pt" {
-  name                        = "MQTT_default_PT"
+resource "azurerm_network_security_rule" "solbroker-mqtt-pt" {
+  name                        = "MQTT-PT"
   priority                    = 106
   direction                  = "Inbound"
   access                     = "Allow"
   protocol                   = "Tcp"
   source_port_range          = "*"
-  destination_port_range     = "1883"
+  destination_port_range     = "1883-1889"
   source_address_prefix      = "*"
   destination_address_prefix = "*"
 
   resource_group_name = var.az_resgrp_name == "" ? azurerm_resource_group.solace_az_resgrp[0].name : var.az_resgrp_name
   network_security_group_name = azurerm_network_security_group.solbroker_secgrp.name
 }
-resource "azurerm_network_security_rule" "solbroker-mqtt-default-tls" {
-  name                        = "MQTT_default_TLS"
+resource "azurerm_network_security_rule" "solbroker-mqtt-tls" {
+  name                        = "MQTT-TLS"
   priority                    = 107
   direction                  = "Inbound"
   access                     = "Allow"
   protocol                   = "Tcp"
   source_port_range          = "*"
-  destination_port_range     = "8883"
+  destination_port_range     = "8883-8889"
+  source_address_prefix      = "*"
+  destination_address_prefix = "*"
+
+  resource_group_name = var.az_resgrp_name == "" ? azurerm_resource_group.solace_az_resgrp[0].name : var.az_resgrp_name
+  network_security_group_name = azurerm_network_security_group.solbroker_secgrp.name
+}
+
+resource "azurerm_network_security_rule" "solbroker-mqtt-ws-pt" {
+  name                        = "MQTT-WS-PT"
+  priority                    = 108
+  direction                  = "Inbound"
+  access                     = "Allow"
+  protocol                   = "Tcp"
+  source_port_range          = "*"
+  destination_port_range     = "8000-8009"
+  source_address_prefix      = "*"
+  destination_address_prefix = "*"
+
+  resource_group_name = var.az_resgrp_name == "" ? azurerm_resource_group.solace_az_resgrp[0].name : var.az_resgrp_name
+  network_security_group_name = azurerm_network_security_group.solbroker_secgrp.name
+}
+resource "azurerm_network_security_rule" "solbroker-mqtt-ws-tls" {
+  name                        = "MQTT-WS-TLS"
+  priority                    = 109
+  direction                  = "Inbound"
+  access                     = "Allow"
+  protocol                   = "Tcp"
+  source_port_range          = "*"
+  destination_port_range     = "8443-8449"
+  source_address_prefix      = "*"
+  destination_address_prefix = "*"
+
+  resource_group_name = var.az_resgrp_name == "" ? azurerm_resource_group.solace_az_resgrp[0].name : var.az_resgrp_name
+  network_security_group_name = azurerm_network_security_group.solbroker_secgrp.name
+}
+
+resource "azurerm_network_security_rule" "solbroker-webtrans-pt" {
+  name                        = "MQTT-WebTrans-PT"
+  priority                    = 110
+  direction                  = "Inbound"
+  access                     = "Allow"
+  protocol                   = "Tcp"
+  source_port_range          = "*"
+  destination_port_range     = "8008"
+  source_address_prefix      = "*"
+  destination_address_prefix = "*"
+
+  resource_group_name = var.az_resgrp_name == "" ? azurerm_resource_group.solace_az_resgrp[0].name : var.az_resgrp_name
+  network_security_group_name = azurerm_network_security_group.solbroker_secgrp.name
+}
+resource "azurerm_network_security_rule" "solbroker-webtrans-tls" {
+  name                        = "MQTT-WebTrans-TLS"
+  priority                    = 111
+  direction                  = "Inbound"
+  access                     = "Allow"
+  protocol                   = "Tcp"
+  source_port_range          = "*"
+  destination_port_range     = "1443"
   source_address_prefix      = "*"
   destination_address_prefix = "*"
 
