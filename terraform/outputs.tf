@@ -4,3 +4,6 @@ output "solace-broker-node-public-ips" {
 output "solace-broker-node-private-ips" {
   value = ["${azurerm_linux_virtual_machine.solace-broker-nodes.*.private_ip_address}"]
 }
+output "solace-broker-loadbalancer-public-ip" {
+  value = ["${azurerm_public_ip.solace_lb_pubip.ip_address}"]
+}
