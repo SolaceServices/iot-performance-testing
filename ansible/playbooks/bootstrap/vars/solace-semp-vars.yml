@@ -52,16 +52,16 @@ vpn:
 #####################################################
 client_profiles:
 - clientProfileName: "SOTI_CP"
-  allowGuaranteedMsgSendEnabled: "false"
-  allowGuaranteedMsgReceiveEnabled: "false"
+  allowGuaranteedMsgSendEnabled: "true"
+  allowGuaranteedMsgReceiveEnabled: "true"
   allowTransactedSessionsEnabled: "false"
   allowSharedSubscriptionsEnabled: "true"
   maxConnectionCountPerClientUsername: 50
   serviceSmfMaxConnectionCountPerClientUsername: 50
   serviceWebMaxConnectionCountPerClientUsername: 0
   allowBridgeConnectionsEnabled: "false"
-  allowGuaranteedEndpointCreateEnabled: "false"
-  maxEndpointCountPerClientUsername: 10000
+  allowGuaranteedEndpointCreateEnabled: "true"
+  maxEndpointCountPerClientUsername: 100000
   maxEgressFlowCount: 10000
   maxIngressFlowCount: 10000
   apiQueueManagementCopyFromOnCreateName: ""
@@ -78,7 +78,7 @@ client_profiles:
   serviceSmfMaxConnectionCountPerClientUsername: 10000
   serviceWebMaxConnectionCountPerClientUsername: 200000
   allowBridgeConnectionsEnabled: "false"
-  allowGuaranteedEndpointCreateEnabled: "false"
+  allowGuaranteedEndpointCreateEnabled: "true"
   maxEndpointCountPerClientUsername: 10000
   maxEgressFlowCount: 10000
   maxIngressFlowCount: 10000
@@ -96,7 +96,7 @@ client_profiles:
   serviceSmfMaxConnectionCountPerClientUsername: 10000
   serviceWebMaxConnectionCountPerClientUsername: 200000
   allowBridgeConnectionsEnabled: "false"
-  allowGuaranteedEndpointCreateEnabled: "false"
+  allowGuaranteedEndpointCreateEnabled: "true"
   maxEndpointCountPerClientUsername: 10000
   maxEgressFlowCount: 10000
   maxIngressFlowCount: 10000

@@ -188,3 +188,13 @@
         with_subelements:
         - "{{ queues | selectattr('subscription_topics', 'defined') | list }}" 
         - "subscription_topics"
+#####################################################
+# Update MQTT Retain Global Memory
+#####################################################
+    - include_role:
+        name: solace/semp/update-mqttRetain-memory
+#####################################################
+# Create MQTT Cache
+#####################################################
+    - include_role:
+        name: solace/semp/create-mqtt-cache
