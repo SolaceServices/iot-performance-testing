@@ -83,3 +83,39 @@ resource "azurerm_lb_rule" "solace_lb_rule_mqtt_default_pt" {
   backend_address_pool_ids       = [azurerm_lb_backend_address_pool.solace_lb_backaddresspool.id]
   probe_id                       = azurerm_lb_probe.solace_lb_probe.id
 }
+
+resource "azurerm_lb_rule" "solace_lb_rule_mqtt_1884" {
+  loadbalancer_id                = azurerm_lb.solace_lb.id
+  name                           = "LBRule_mqtt_1884"
+  load_distribution              = "Default"
+  protocol                       = "Tcp"
+  frontend_port                  = 1884
+  backend_port                   = 1884
+  frontend_ip_configuration_name = azurerm_lb.solace_lb.frontend_ip_configuration[0].name
+  backend_address_pool_ids       = [azurerm_lb_backend_address_pool.solace_lb_backaddresspool.id]
+  probe_id                       = azurerm_lb_probe.solace_lb_probe.id
+}
+
+resource "azurerm_lb_rule" "solace_lb_rule_mqtts_default_pt" {
+  loadbalancer_id                = azurerm_lb.solace_lb.id
+  name                           = "LBRule_mqtts_default_pt"
+  load_distribution              = "Default"
+  protocol                       = "Tcp"
+  frontend_port                  = 8883
+  backend_port                   = 8883
+  frontend_ip_configuration_name = azurerm_lb.solace_lb.frontend_ip_configuration[0].name
+  backend_address_pool_ids       = [azurerm_lb_backend_address_pool.solace_lb_backaddresspool.id]
+  probe_id                       = azurerm_lb_probe.solace_lb_probe.id
+}
+
+resource "azurerm_lb_rule" "solace_lb_rule_mqtts_1884" {
+  loadbalancer_id                = azurerm_lb.solace_lb.id
+  name                           = "LBRule_mqtts_8884"
+  load_distribution              = "Default"
+  protocol                       = "Tcp"
+  frontend_port                  = 8884
+  backend_port                   = 8884
+  frontend_ip_configuration_name = azurerm_lb.solace_lb.frontend_ip_configuration[0].name
+  backend_address_pool_ids       = [azurerm_lb_backend_address_pool.solace_lb_backaddresspool.id]
+  probe_id                       = azurerm_lb_probe.solace_lb_probe.id
+}
