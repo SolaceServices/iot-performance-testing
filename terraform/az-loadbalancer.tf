@@ -28,6 +28,14 @@ resource "azurerm_public_ip" "solace_lb_pubip" {
   location            = var.az_resgrp_name == "" ? azurerm_resource_group.solace_az_resgrp[0].location : data.azurerm_resource_group.input_resgroup[0].location
   resource_group_name = var.az_resgrp_name == "" ? azurerm_resource_group.solace_az_resgrp[0].name : var.az_resgrp_name
   allocation_method   = "Static"
+  domain_name_label   = "${var.tag_name_prefix}-solbroker-lb"
+
+  tags = {
+    Name    = "${var.tag_name_prefix}-lb-pubip"
+    Owner   = var.tag_owner
+    Purpose = "${var.tag_purpose} - Solace LB PubIP"
+    Days    = var.tag_days
+  }
 }
 
 resource "azurerm_lb_backend_address_pool" "solace_lb_backaddresspool" {

@@ -139,12 +139,10 @@ resource "azurerm_network_interface" "solbroker-nodes-nic" {
 resource "azurerm_public_ip" "solbroker-nodes-pubip" {
   count = var.solace_broker_count
 
-  name                = "${var.tag_name_prefix}-solbroker-pubip-${count.index}"
+  name                   = "${var.tag_name_prefix}-solbroker-pubip-${count.index}"
   location               = var.az_resgrp_name == "" ? azurerm_resource_group.solace_az_resgrp[0].location : data.azurerm_resource_group.input_resgroup[0].location
   resource_group_name    = var.az_resgrp_name == "" ? azurerm_resource_group.solace_az_resgrp[0].name : var.az_resgrp_name
-
-#  allocation_method      = "Dynamic"
-#  sku                    = "Basic"
+  domain_name_label      = "${var.tag_name_prefix}-solbroker-node-${count.index}"
   allocation_method      = "Static"
   sku                    = "Standard"
 #  zones                  = [ 2 ]
