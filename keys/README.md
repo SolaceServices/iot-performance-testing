@@ -2,7 +2,7 @@
 
 SSH Keys to access the VMs should be stored by default on this directory. 
 
-If you have preexisting SSH Keys copy them here. Otherwise, they can be created by running the following command:
+If you have preexisting SSH Keys copy them here. Otherwise, they can be created by running the following command (might change based on the OS):
 
    ```   
      ssh-keygen -f new_key
@@ -17,7 +17,7 @@ variable "public_key_path" {
 }
 variable "private_key_path" {
   default = "../keys/SolCache_key"
-  description = "Local path to the private key used to connect to the Instances (Not to be uploaded to AWS)"
+  description = "Local path to the private key used to connect to the Instances (Not to be uploaded to the Cloud Provider)"
 }
 ```
 

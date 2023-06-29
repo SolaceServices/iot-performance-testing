@@ -2,11 +2,6 @@
 # tasks file for solace-broker
 - debug: msg="solace_edition = {{ solace_edition }}"
 
-- name: Define Key for Solace Enterprise EVAL version 
-  set_fact:
-    solace_eval_key: "      - productkey=quscWoxxdp4-Gg88sDQ9dcA-k8vnR1QrpBr-EVAL-G-GA_1"
-  when: solace_edition == "entEVAL"
-
 - name: Copy Solace Enterprise Edition {{ solace_image_name }}-{{ solace_image_version }}-docker.tar.gz to broker nodes
   copy:
     src: "{{ solace_image_name }}-{{ solace_image_version }}-docker.tar.gz"
@@ -15,10 +10,17 @@
     mode: "{{ file_mode }}"
   when: solace_edition == "enterprise"
 
-
 - name: Load Solace Enterprise Edition Docker Image
   command: docker load -i ./{{ solace_image_name }}-{{ solace_image_version }}-docker.tar.gz
   when: solace_edition == "enterprise"
+
+- name: Copy Cert file to the Broker
+  copy:
+    src: "{{ tls_cert_file_path ~ tls_cert_file }}"
+    dest: "{{ solace_mount_path }}/certs"
+    owner: solace
+    group: solace
+  when: tls_cert_file | length > 0 
 
 - name: Parse & copy docker-compose template to Standalone broker node
   template:

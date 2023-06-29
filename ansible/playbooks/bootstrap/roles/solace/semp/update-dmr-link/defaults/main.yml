@@ -11,3 +11,5 @@ dmrlink_queueMaxMsgSpoolUsage: 20000
 dmrlink_linkSpan: "internal"
 dmrlink_egressFlowWindowSize: 255
 dmrlink_enabled: false 
+dmrlink_transportTlsEnabled: false
+dmrlink_transportCompressedEnabled: false

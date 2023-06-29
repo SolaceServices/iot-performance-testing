@@ -7,13 +7,13 @@ This repository is a collection of Terraform and Ansible configuration files, th
 ### Warnings
 
 > :warning: This project is intended to serve as a POC for demonstrating the functionality of the Solace PubSub+ Event Mesh, plus the automation capabilities of the Solace Brokers. Therefore, there are several opportunities for improvement.
-> :warning: **Keep in mind that this code has not been tested or coded to be PRODUCTION ready.**
+> :warning: **Please keep in mind that this code has not been tested or coded to be PRODUCTION ready.**
 
 
 ## Getting Started
 
 There are 4 main subdirectories in this repository: 
-- [keys](/keys) - Used to store the private & public keys to access via SSH the Solace Broker, PubSub+ Cache and Client nodes
+- [keys](/keys) - Used to store the private & public keys to access via SSH the Solace Broker HOST, as well as the PEM certificate files to configure TLS on the Brokers. For details on Server Certificates supported please visit the following [link](https://docs.solace.com/Security/Managing-Server-Certs.htm)
 - [terraform](/terraform) - Contains Terraform configuration & template files to create resources on the cloud as well as files to be used by Ansible (Inventories, Playbooks, Variables)
 - [ansible](/ansible) - Contains playbooks, inventories, variables & roles to be used by Ansible to configure the VMs. There are static files that can be modified according to what is needed, as well as files that will get dynamically created by Terraform upon execution, based on the resources terraform creates (ex: public or private IPs, etc.).
 - [images](/images) - Contains images for the README files
@@ -45,20 +45,27 @@ Azure
      export ARM_TENANT_ID="00000000-0000-0000-0000-000000000000"
    ```
 
-   If creating a new Service Principal with the Contributor role is not possible, you can have terraform use the Azure CLI login as described [here](https://www.terraform.io/docs/providers/azurerm/guides/azure_cli.html), Basically you will have to run the "az loging" command first, and specify the following ENV variables:
+   If creating a new Service Principal with the Contributor role is not possible, you can have terraform use the Azure CLI login as described [here](https://www.terraform.io/docs/providers/azurerm/guides/azure_cli.html), Basically you will have to run the "az loging" command first on the CLI session running Terraform & Ansible, and specify the following ENV variables:
    ```   
      export ARM_SUBSCRIPTION_ID="00000000-0000-0000-0000-000000000000"
      export ARM_TENANT_ID="00000000-0000-0000-0000-000000000000"
    ```
 
    If the Azure CLI has no valid session, when running Terraform plan or apply an error similar to this should be received:
+   ```   
    "Error: Error building account: Error getting authenticated object ID: Error parsing json result from the Azure CLI: Error waiting for the Azure CLI: exit status 1"
+   ```      
 
 SSH Keys
 
 + Configure the private & public SSH keys required to login & setup the hosts.
 + Take a look at the README file inside [/keys](/keys) for a more detailed description on how to do it.
 > :warning: The SSH keys to be used should have restrictive permissions (ex: 600), otherwise Terraform and Ansible could trigger an error while connecting to the VMs
+
+TLS Keys
+
++ TLS Certificate can be configure on the Solace Brokers to enable a secure channel between them and the applications.
++ To have these scripts configure TLS on the Brokers, copy both the certificate PEM file as well as the RootCA PEM file (that issued the certificate) inside the [/keys](/keys) folder, and modify the ansible variables "tls_cert_file" and "certAuthorityContent" to match their file names respectively inside the ansible playbook file [az-sa-sol-broker-centosnodes.yml](/ansible/playbooks/bootstrap/az-sa-sol-broker-centosnodes.yml)   
 
 ## Creating Resources
 
@@ -82,10 +89,6 @@ Once testing has concluded and the cloud resources are no longer needed, all of 
 and typing "yes" when prompted.
 
 ## Scripts Highlights 
-
-**List of resources to be created by Terraform**:
-
-+ TBD...
 
 **List of Tasks to be executed by Ansible at bootstrap**:
 

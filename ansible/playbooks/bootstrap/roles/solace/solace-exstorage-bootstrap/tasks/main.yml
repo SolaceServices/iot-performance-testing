@@ -53,3 +53,8 @@
     path: "{{ solace_mount_path }}/spool-cache-backup"
     state: directory
     owner: solace
+- name: Create "cert" directory
+  file:
+    path: "{{ solace_mount_path }}/certs"
+    state: directory
+    owner: solace

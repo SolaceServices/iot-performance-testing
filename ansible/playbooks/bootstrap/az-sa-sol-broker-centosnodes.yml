@@ -52,6 +52,9 @@
         solhost_name: "{{ solhost_name_prefix ~ groups['sol_brokers'].index(inventory_hostname) }}"
         node_role: single
         solace_edition: entEVAL
+        solace_eval_key: "quscWoxxdp4-Gg88sDQ9dcA-k8vnR1QrpBr-EVAL-G-GA_1"  #Leave as EMPTY string (or delete) for Standard, or Enterprise deployments
+        tls_cert_file: "Solnode_full.pem" #Leave as EMPTY string (or delete) if TLS is not needed
+        tls_cert_file_path: "../../../keys/" #Path relative to this playbook - Delete if TLS is not needed
         time_zone: US/Eastern
         system_scaling_maxconnectioncount: 1000
         #ulimit_nofile_hard: 42192
@@ -97,6 +100,14 @@
     - include_role:
         name: solace/semp/create-dmr-cluster
 #####################################################
+# Create DomainCertAuthority for TLS Links - Remove if TLS is not needed
+#####################################################
+    - include_role:
+        name: solace/semp/create-domain-certauthority
+      vars:
+        certAuthorityName: "SolTestCorpCA" 
+        certAuthorityContent: "{{ lookup('file', '../../../keys/SolTestCorpCA.pem') }}" #Path relative to this playbook
+#####################################################
 # Create DMR Links - Disabled so that Addresses can be configured
 #####################################################
     - name: Create DMR Links
@@ -130,6 +141,7 @@
       vars:
         dmrRemoteNode: "{{ solhost_name_prefix ~ hostIndex }}"
         dmrlink_enabled: true
+        dmrlink_transportTlsEnabled: true
       loop: "{{ groups['sol_brokers'] }}"
       loop_control:
         index_var: hostIndex

@@ -2,6 +2,8 @@
 *key*
 *.pub
 *.pem
+*.srl
+*.csr
 
 #Mac files
 .DS_Store

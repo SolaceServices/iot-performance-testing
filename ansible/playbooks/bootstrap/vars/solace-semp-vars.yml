@@ -26,6 +26,7 @@ dmr:
   dmrlink_linkSpan: "internal"
   dmrlink_egressFlowWindowSize: 255
   dmrlink_enabled: false #Disabled on creation so that addresses can be configured
+  dmrlink_transportTlsEnabled: true
 
 #####################################################
 # config variables for creating the VPN

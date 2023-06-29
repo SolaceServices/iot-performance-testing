@@ -4,8 +4,10 @@ solace_edition: standard  #standard, entEVAL or enterprise
 node_role: single
 solace_image_version: latest
 solace_image_name: solace/solace-pubsub-standard
-solace_eval_key: ""
 solace_storage_rootpath: /vmr
+solace_eval_key: "" #Leave as EMPTY string for Standard, or Enterprise deployments
+tls_cert_file: ""   #Leave as EMPTY string for NON-TLS deployments
+tls_cert_file_path: "./"
 username_admin: admin
 username_admin_password: admin
 system_scaling_maxconnectioncount: 1000

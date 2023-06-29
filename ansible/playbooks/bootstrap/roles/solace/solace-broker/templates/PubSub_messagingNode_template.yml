@@ -45,4 +45,8 @@ services:
       - redundancy_group_node_monitor_nodetype=monitoring
       - redundancy_group_node_monitor_connectvia={{ ha_ip_monitor }}
       - configsync_enable=yes
-{{ solace_eval_key }}
+{% if tls_cert_file|length  %}      - tls_servercertificate_filepath={{ tls_cert_file }}
+{% endif %}
+{% if solace_eval_key|length  %}      - productkey={{ solace_eval_key }}
+{% endif %}
+
