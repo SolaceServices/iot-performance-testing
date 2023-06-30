@@ -56,8 +56,8 @@
         tls_cert_file: "Solnode_full.pem" #Leave as EMPTY string (or delete) if TLS is not needed
         tls_cert_file_path: "../../../keys/" #Path relative to this playbook - Delete if TLS is not needed
         time_zone: US/Eastern
-        system_scaling_maxconnectioncount: 1000
-        #ulimit_nofile_hard: 42192
+        system_scaling_maxconnectioncount: 100000
+        ulimit_nofile_hard: 222192
 
 #------------------------------------------------------------------------------------#
 #- hosts: sol_brokers
@@ -102,11 +102,11 @@
 #####################################################
 # Create DomainCertAuthority for TLS Links - Remove if TLS is not needed
 #####################################################
-    - include_role:
-        name: solace/semp/create-domain-certauthority
-      vars:
-        certAuthorityName: "SolTestCorpCA" 
-        certAuthorityContent: "{{ lookup('file', '../../../keys/SolTestCorpCA.pem') }}" #Path relative to this playbook
+#    - include_role:
+#        name: solace/semp/create-domain-certauthority
+#      vars:
+#        certAuthorityName: "SolTestCorpCA" 
+#        certAuthorityContent: "{{ lookup('file', '../../../keys/SolTestCorpCA.pem') }}" #Path relative to this playbook
 #####################################################
 # Create DMR Links - Disabled so that Addresses can be configured
 #####################################################

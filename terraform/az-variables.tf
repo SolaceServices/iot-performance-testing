@@ -30,7 +30,7 @@ variable "az_admin_username" {
 
 # General Variables
 variable "tag_owner" {
-  default = "Manuel Moreno"
+  default = "Soti Solace"
 }
 variable "tag_days" {
   default = "5"
@@ -39,7 +39,7 @@ variable "tag_purpose" {
   default = "EventMesh Testing"
 }
 variable "tag_name_prefix" {
-  default = "mmoreno-eventmesh"
+  default = "soti"
 }
 
 # solace broker nodes count
@@ -50,8 +50,9 @@ variable "solace_broker_count" {
 }
 variable "sol_messaging_vm_type" {
 
+   default = "Standard_D8s_v3"
 #  default = "Standard_DS2_v2"   # (2 cpus  7G Ram, Max  6400 IOPs  96 MB/s - General Purpose VM)
-  default = "Standard_D2s_v3"   # (2 cpus  8G Ram, Max  3200 IOPs  48 MB/s - General Purpose VM)
+#  default = "Standard_D2s_v3"   # (2 cpus  8G Ram, Max  3200 IOPs  48 MB/s - General Purpose VM)
 #  default = "Standard_DS3_v2"   # (4 cpus 14G Ram, Max 12800 IOPs 192 MB/s - General Purpose VM)
 #  default = "Standard_D4s_v3"   # (4 cpus 16G Ram, Max 6400 IOPs 96 MB/s - General Purpose VM) - Supports Ultradisks
 #  default = "Standard_F4s_v2"    # (4 cpus  8G Ram, Max  6400 IOPs  95 MB/s - Compute Optimized VM)

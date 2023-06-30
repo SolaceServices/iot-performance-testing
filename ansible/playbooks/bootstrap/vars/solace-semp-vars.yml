@@ -41,7 +41,7 @@ vpn:
   serviceMqttPlainTextListenPort:  1884
   serviceMqttWebSocketEnabled: true
   serviceMqttWebSocketListenPort: 8001
-  serviceMqttTlsEnabled: true
+  serviceMqttTlsEnabled: false
   serviceMqttTlsListenPort: 8884
   serviceMqttTlsWebSocketEnabled: true
   serviceMqttTlsWebSocketListenPort: 8444
@@ -57,48 +57,12 @@ client_profiles:
   allowGuaranteedMsgReceiveEnabled: "true"
   allowTransactedSessionsEnabled: "false"
   allowSharedSubscriptionsEnabled: "true"
-  maxConnectionCountPerClientUsername: 50
-  serviceSmfMaxConnectionCountPerClientUsername: 50
+  maxConnectionCountPerClientUsername: 100000
+  serviceSmfMaxConnectionCountPerClientUsername: 100000
   serviceWebMaxConnectionCountPerClientUsername: 0
   allowBridgeConnectionsEnabled: "false"
   allowGuaranteedEndpointCreateEnabled: "true"
   maxEndpointCountPerClientUsername: 100000
-  maxEgressFlowCount: 10000
-  maxIngressFlowCount: 10000
-  apiQueueManagementCopyFromOnCreateName: ""
-  apiTopicEndpointManagementCopyFromOnCreateName: ""
-  maxSubscriptionCount: 10000
-  maxTransactedSessionCount: 10
-  maxTransactionCount: 10
-- clientProfileName: "webCP"
-  allowGuaranteedMsgSendEnabled: "true"
-  allowGuaranteedMsgReceiveEnabled: "true"
-  allowTransactedSessionsEnabled: "false"
-  allowSharedSubscriptionsEnabled: "true"
-  maxConnectionCountPerClientUsername: 200000
-  serviceSmfMaxConnectionCountPerClientUsername: 10000
-  serviceWebMaxConnectionCountPerClientUsername: 200000
-  allowBridgeConnectionsEnabled: "false"
-  allowGuaranteedEndpointCreateEnabled: "true"
-  maxEndpointCountPerClientUsername: 10000
-  maxEgressFlowCount: 10000
-  maxIngressFlowCount: 10000
-  apiQueueManagementCopyFromOnCreateName: ""
-  apiTopicEndpointManagementCopyFromOnCreateName: ""
-  maxSubscriptionCount: 10000
-  maxTransactedSessionCount: 10
-  maxTransactionCount: 10
-- clientProfileName: "testCP"
-  allowGuaranteedMsgSendEnabled: "true"
-  allowGuaranteedMsgReceiveEnabled: "true"
-  allowTransactedSessionsEnabled: "false"
-  allowSharedSubscriptionsEnabled: "true"
-  maxConnectionCountPerClientUsername: 200000
-  serviceSmfMaxConnectionCountPerClientUsername: 10000
-  serviceWebMaxConnectionCountPerClientUsername: 200000
-  allowBridgeConnectionsEnabled: "false"
-  allowGuaranteedEndpointCreateEnabled: "true"
-  maxEndpointCountPerClientUsername: 10000
   maxEgressFlowCount: 10000
   maxIngressFlowCount: 10000
   apiQueueManagementCopyFromOnCreateName: ""
@@ -115,16 +79,6 @@ client_usernames:
 - username: "SOTIUsr"
   aclProfileName: "default"
   clientProfileName: "SOTI_CP"
-  enabled: true
-  password: solace123
-- username: "webUsr"
-  aclProfileName: "default"
-  clientProfileName: "webCP"
-  enabled: true
-  password: solace123
-- username: "testUsr"
-  aclProfileName: "default"
-  clientProfileName: "testCP"
   enabled: true
   password: solace123
 

@@ -4,6 +4,7 @@
 *.pem
 *.srl
 *.csr
+*.crt
 
 #Mac files
 .DS_Store
