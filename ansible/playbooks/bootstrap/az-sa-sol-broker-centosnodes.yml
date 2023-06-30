@@ -141,7 +141,7 @@
       vars:
         dmrRemoteNode: "{{ solhost_name_prefix ~ hostIndex }}"
         dmrlink_enabled: true
-        dmrlink_transportTlsEnabled: true
+        dmrlink_transportTlsEnabled: false
       loop: "{{ groups['sol_brokers'] }}"
       loop_control:
         index_var: hostIndex

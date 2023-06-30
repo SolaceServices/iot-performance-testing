@@ -26,7 +26,7 @@ dmr:
   dmrlink_linkSpan: "internal"
   dmrlink_egressFlowWindowSize: 255
   dmrlink_enabled: false #Disabled on creation so that addresses can be configured
-  dmrlink_transportTlsEnabled: true
+  dmrlink_transportTlsEnabled: false
 
 #####################################################
 # config variables for creating the VPN
@@ -41,7 +41,7 @@ vpn:
   serviceMqttPlainTextListenPort:  1884
   serviceMqttWebSocketEnabled: true
   serviceMqttWebSocketListenPort: 8001
-  serviceMqttTlsEnabled: false
+  serviceMqttTlsEnabled: true
   serviceMqttTlsListenPort: 8884
   serviceMqttTlsWebSocketEnabled: true
   serviceMqttTlsWebSocketListenPort: 8444
