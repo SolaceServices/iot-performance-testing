@@ -55,7 +55,19 @@ Azure
    ```   
    "Error: Error building account: Error getting authenticated object ID: Error parsing json result from the Azure CLI: Error waiting for the Azure CLI: exit status 1"
    ```      
+## Updating Variables
+[az-variables.tf](/terraform/az-variables.tf) is the variable file where all the following details needs to be varified/updated:
+1. az_region - The Azure region where the deployment will take place
+2. public_key_path/public_key_path - SSH key file path and name
+3. tag_owner,tag_days,tag_purpose - Tags to be associated with resource created
+4. tag_name_prefix - All the resource name will be prefixed by this prefix
+5. solace_broker_count - numbert of broker nodes to be created
+6. sol_messaging_vm_type - The Azure VM type that needs to be created. (for eg.: D2s_v3, D8_v3, etc.)
+7. az_resgrp_name - Azure resource group. Leave the default value empty if you want to create a new resource grouop as part of the script.
+8. subnet_id - Azure subnet_id. Leave the default value empty if you want to create a new subnet_id as part of the script.
+9. solbroker_secgroup_ids - Azure Security group Id. Leave the default value empty if you want to create a new security group as part of the script.
 
+## Configuring SSH Keys and TLS Certificates
 SSH Keys
 
 + Configure the private & public SSH keys required to login & setup the hosts.
@@ -65,9 +77,10 @@ SSH Keys
 TLS Keys
 
 + TLS Certificate can be configure on the Solace Brokers to enable a secure channel between them and the applications.
-+ To have these scripts configure TLS on the Brokers, copy both the certificate PEM file as well as the RootCA PEM file (that issued the certificate) inside the [/keys](/keys) folder, and modify the ansible variables "tls_cert_file" and "certAuthorityContent" to match their file names respectively inside the ansible playbook file [az-sa-sol-broker-centosnodes.yml](/ansible/playbooks/bootstrap/az-sa-sol-broker-centosnodes.yml)   
++ To have these scripts configure TLS on the Brokers, copy both the certificate PEM file as well as the RootCA PEM file (that issued the certificate) inside the [/keys](/keys) folder, and modify the ansible variables "tls_cert_file" and "certAuthorityContent" to match their file names respectively inside the ansible playbook file [az-sa-sol-broker-centosnodes.yml](/ansible/playbooks/bootstrap/az-sa-sol-broker-centosnodes.yml)
++ This script can create more than 1 broker nodes. This script will use the same certificate file for all the nodes.
 
-## Creating Resources
+## Running the Script - Creating Resources
 
 Once all the variables and configurations have been set according to our needs, we can have Terraform create all the infrastructure for us, by going into the appropriate PATH where the Terraform resource files are located (in this case: [/terraform](/terraform)) and typing the following commands:
 
